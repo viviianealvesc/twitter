@@ -9,7 +9,7 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Livewire\livewire;
 
-it('shold be able to create a tweet', function() {
+it('shold be able to create a new tweet', function() {
     $user = User::factory()->create();
 
     actingAs($user);
