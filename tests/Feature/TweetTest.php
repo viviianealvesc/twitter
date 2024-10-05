@@ -29,11 +29,18 @@ it('shold be able to create a new tweet', function() {
 
 
 it('should make sure that only authenticad users can tweet', function() {
+
     livewire(Create::class)
     ->set('body', 'This is my first tweet')
     ->call('tweet')
     ->asserForbidden()
     ->assertRedirect(route('login'));   
+
+
+
+});
+
+todo('should be able to create a tweet', function() {
 
     actingAs(User::factory()->create());
 
@@ -41,10 +48,27 @@ it('should make sure that only authenticad users can tweet', function() {
     ->set('body', 'This is my first Tweet')
     ->call('tweet')
     ->assertEmitted('tweet::created');
+});
+
+test('body is required', function() {
+
+    $user = User::factory()->create();
+    actingAs($user);
+
+    livewire(Create::class)         
+        ->set('body', '')
+        ->call('tweet')
+        ->assertHasErrors(['body' => 'required']);
 
 });
 
-todo('should be able to create a tweet');
-todo('body is required');
-todo('the tweet body should have a max length of 140 characters');
+test('the tweet body should have a max length of 140 characters', function() {
+
+    actingAs(User::factory()->create());
+
+    livewire(Create::class)         
+    ->set('body', str_repeat('a', 141)) //ele vai me criar uma string com mais de 140 caracteres
+    ->call('tweet')
+    ->assertHasErrors(['body' => 'max']);
+});
 todo('should show the on the timeline');
